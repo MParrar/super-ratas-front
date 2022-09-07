@@ -1,8 +1,4 @@
-.container{
-  background: blue;
-  display: flex;
-  flex-direction: column;
-}
+
 .card__container__super__ratas{
   display: grid;
   justify-items: center;

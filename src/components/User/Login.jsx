@@ -1,7 +1,104 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import UserContext from '../../context/user/userContext';
+import { useNavigate } from 'react-router-dom'
+import { Button, Col, Form, Row } from 'react-bootstrap'
+import './login.css'
 
 export const Login = () => {
+
+    const navigate = useNavigate();
+
+    const [userFound, setUserFound] = useState({
+        email: '',
+        password: ''
+    });
+
+    const { email, password } = userFound;
+
+    const userContext = useContext(UserContext);
+    const { login, user, authenticated } = userContext;
+
+    useEffect(() => {
+        if (authenticated) {
+            navigate('/')
+        }
+    }, [authenticated]);
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+        await login(userFound);
+    }
+
+
+
+    const handleChange = ({ target: { name, value, type } }) => {
+        setUserFound({
+            ...userFound,
+            [name]: value,
+        });
+    };
+
+    const justSee = () => {
+        navigate('/')
+    }
+
     return (
-        <div>Login</div>
+        <div className="container2__login">
+
+            <div className="box__login">
+                <div className='contents'>
+                    <h1>Log In</h1>
+                    <hr />
+                    <h2>Super Ratas</h2>
+                    <Form
+                        className='mt-4'
+                    // onSubmit={onSubmit}
+                    >
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md={12} controlId="formGridEmail">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    onChange={handleChange}
+                                    name='email'
+                                    value={email}
+                                    type="email"
+                                    placeholder="Your Email" />
+                            </Form.Group>
+
+                            <Form.Group as={Col} md={12} controlId="formGridPassword">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control
+                                    onChange={handleChange}
+                                    value={password}
+                                    name='password'
+                                    type="password"
+                                    placeholder="Your password" />
+                            </Form.Group>
+                        </Row>
+                        <div className='center_buttons'>
+                            <Button
+                                style={{ margin: '0 auto' }}
+                                variant='secondary'
+                                size='sm m-3'
+                                onClick={onSubmit}
+                            >
+                                Login
+                            </Button>
+                            <Button
+                                style={{ margin: '0 auto' }}
+                                variant='secondary'
+                                size='sm m-3'
+                                onClick={justSee}
+                            >
+                                I just want to see
+                            </Button>
+                        </div>
+                    </Form>
+                </div>
+
+
+
+            </div>
+        </div>
     )
 }

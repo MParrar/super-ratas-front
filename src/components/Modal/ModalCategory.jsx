@@ -26,7 +26,6 @@ export const ModalCategory = ({ showModalCategory, handleCloseModalCategoy }) =>
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (categories.filter((item) => item.name.toUpperCase() === category.name.toUpperCase())[0]) {
-            console.log("NEEL")
         } else {
             const response = await createCategory(category);
             console.log(response)

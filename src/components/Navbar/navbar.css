@@ -1,13 +1,14 @@
 .header{
     display: flex;
     justify-content: space-around;
-    background: rgb(27, 25, 25);
+    background: #FDF9EA;
     height: 60px;
     margin-bottom: 40px;
   }
 
 .title{
-    color: white;
+    font-family: "Lucida Console", Monaco, monospace;
+    color: #84613D;
     margin: 0;
     padding: 5px;
     text-align: center;

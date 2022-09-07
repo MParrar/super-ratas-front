@@ -4,6 +4,7 @@ import CardContext from '../../context/card/cardContext';
 import UserContext from '../../context/user/userContext'
 import CategoryContext from '../../context/category/categoryContext'
 import { createCard, editCard } from '../../services/card';
+import { getBuyers } from '../../services/buyer';
 
 let initialCard = {
     category_id: '',
@@ -12,39 +13,56 @@ let initialCard = {
     points: '',
     price: '',
     status_id: 1,
-    user_id: 3
+    user_id: ''
 }
 export const ModalCard = ({ show, handleClose, selectedCard, disable = false }) => {
 
     const [card, setCard] = useState(selectedCard ? selectedCard : initialCard);
+    const [buyer, setBuyer] = useState({});
     const { price, points, observation, category_id, phone_number, email, address } = card;
     const cardContext = useContext(CardContext);
     const { getCards } = cardContext;
 
     const userContext = useContext(UserContext);
-    const { getUsers } = userContext;
+    const { user, getUsers, users } = userContext;
 
     const categoryContext = useContext(CategoryContext);
     const { getCategories, categories } = categoryContext;
 
     useEffect(() => {
-        getCategories()
+        if (card?.status_id === 2) {
+            getAllBuyer({
+                card_id: card.id,
+                user_id: user.id
+            });
+
+        }
+        getCategories();
+        setCard({
+            ...card,
+            user_id: user.id
+        });
     }, []);
 
+    const getAllBuyer = async (buyer) => {
+        setBuyer(await getBuyers(buyer));
+
+    }
     const handleChange = ({ target: { name, value, type } }) => {
-        console.log(name, value, type)
         if (type === 'number') value = Number(value);
         setCard({
             ...card,
             [name]: value,
         });
-        console.log(card)
     };
 
     const handleSubmit = (e) => {
         e.preventDefault()
+
         if (selectedCard) {
             editCard(card)
+            getCards()
+
         } else {
             createCard(card)
 
@@ -58,7 +76,7 @@ export const ModalCard = ({ show, handleClose, selectedCard, disable = false }) 
         card &&
         (<Modal show={show} onHide={handleClose} size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title>{selectedCard ? 'Edit card' : 'Add new card'}</Modal.Title>
+                <Modal.Title>{disable ? 'See more information' : selectedCard ? 'Edit card' : 'Add new card'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
@@ -122,13 +140,17 @@ export const ModalCard = ({ show, handleClose, selectedCard, disable = false }) 
                         </>
                     }
                     <Row className="mb-3">
-                        <Form.Group as={Col} controlId="formGridEmail">
-                            <Form.Label>Owner</Form.Label>
-                            <Form.Control
-                                type="text"
-                                disabled={disable}
-                                placeholder="Enter owner" />
-                        </Form.Group>
+                        {
+                            card.status_id === 2 &&
+                            <Form.Group as={Col} controlId="formGridEmail">
+                                <Form.Label>Buyer</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={buyer[0]?.user_name}
+                                    readOnly
+                                />
+                            </Form.Group>
+                        }
 
                         <Form.Group as={Col} controlId="formGridPassword">
                             <Form.Label>Category</Form.Label>
