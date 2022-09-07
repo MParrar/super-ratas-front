@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import UserContext from '../../context/user/userContext';
 import { ModalBuy } from '../Modal/ModalBuy';
 import { ModalCard } from '../Modal/ModalCard';
 import './card.css'
@@ -10,6 +11,10 @@ export const Card = ({ card }) => {
     const [disable, setDisable] = useState(false);
     const [showBuy, setShowBuy] = useState(false);
     const [selectedCard, setSelectedCard] = useState();
+
+    const userContext = useContext(UserContext);
+    const { user } = userContext;
+
 
     const editCard = () => {
         setSelectedCard(card);
@@ -39,6 +44,10 @@ export const Card = ({ card }) => {
         setSelectedCard();
         setDisable(false);
     }
+
+    const deleteCard = () => {
+
+    }
     return (
 
         <>
@@ -56,18 +65,31 @@ export const Card = ({ card }) => {
                                 </Button>
                             </span>
                         </OverlayTrigger>
-                        <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Buy card</Tooltip>}>
-                            <span className="d-inline-bloc m-2">
-                                <Button onClick={() => buyCard()} variant='success' size='sm'>
-                                    B
-                                </Button>
+                        <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Delete card</Tooltip>}>
+                            <span className="d-inline-block m-2">
+                                {user?.id === card.user_id &&
+                                    <Button onClick={() => deleteCard()} variant='danger' size='sm'>
+                                        D
+                                    </Button>
+                                }
                             </span>
                         </OverlayTrigger>
                         <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Edit card</Tooltip>}>
                             <span className="d-inline-block">
-                                <Button onClick={() => editCard()} variant='warning' size='sm'>
-                                    E
-                                </Button>
+                                {user?.id === card.user_id &&
+                                    <Button onClick={() => editCard()} variant='warning' size='sm'>
+                                        E
+                                    </Button>
+                                }
+                            </span>
+                        </OverlayTrigger>
+                        <OverlayTrigger overlay={<Tooltip id="tooltip-disabled" >Buy card</Tooltip>}>
+                            <span className="d-inline-bloc m-2">
+                                {
+                                    (user && user?.id !== card.user_id && card.status_id === 1) && <Button onClick={() => buyCard()} variant='success' size='sm'>
+                                        B
+                                    </Button>
+                                }
                             </span>
                         </OverlayTrigger>
                     </div>

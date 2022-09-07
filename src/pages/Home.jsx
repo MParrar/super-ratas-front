@@ -9,7 +9,7 @@ import UserState from '../context/user/userState'
 
 export const Home = () => {
     return (
-        <UserState>
+        <>
             <CategoryState>
                 <CardState>
                     <Navbar />
@@ -19,6 +19,6 @@ export const Home = () => {
                     </Body>
                 </CardState>
             </CategoryState>
-        </UserState>
+        </>
     )
 }

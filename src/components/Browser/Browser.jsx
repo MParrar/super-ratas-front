@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Button, Dropdown } from 'react-bootstrap'
 import CardContext from '../../context/card/cardContext';
 import CategoryContext from '../../context/category/categoryContext'
+import UserContext from '../../context/user/userContext';
 import { ModalCard } from '../Modal/ModalCard';
 import { ModalCategory } from '../Modal/ModalCategory';
 import './browser.css'
@@ -15,6 +16,9 @@ export const Browser = () => {
 
     const categoryContext = useContext(CategoryContext);
     const { getCategories, categories } = categoryContext;
+
+    const userContext = useContext(UserContext);
+    const { user } = userContext;
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -32,15 +36,15 @@ export const Browser = () => {
     }
 
     const filterByCategory = (category) => {
-        console.log(category)
         getCardsByCategory(category)
     }
     return (
         <>
             <div className='browser__super__ratas'>
-                <input />
-                <Button className='m-2' onClick={() => setShow(true)}>+</Button>
-                <Button className='m-2' onClick={() => setShowModalCategory(true)}>+</Button>
+                <input className='m-2' />
+                {user && <Button className='m-2' onClick={() => setShow(true)}>+</Button>}
+                {user && user.role_id === 3 && <Button className='m-2' onClick={() => setShowModalCategory(true)}>+</Button>
+                }
                 <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                         Filter by category
