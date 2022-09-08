@@ -22,6 +22,9 @@
 }
 
 .card__title{
+font-family: "Lucida Console", Monaco, monospace;
+color: #84613D;
+font-size: medium;
 color:white;
 padding-left: 20px;
 width: 300px;

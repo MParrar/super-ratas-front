@@ -1,8 +1,10 @@
 import React, { useContext } from 'react'
 import { Button, Modal } from 'react-bootstrap'
+import Swal from 'sweetalert2';
 import CardContext from '../../context/card/cardContext';
 import UserContext from '../../context/user/userContext';
 import { buyCard, changeStatusCard } from '../../services/card';
+
 
 export const ModalBuy = ({ showBuy, handleCloseBuy, selectedCard }) => {
     const { price, points } = selectedCard;
@@ -26,6 +28,13 @@ export const ModalBuy = ({ showBuy, handleCloseBuy, selectedCard }) => {
                 updated_date: new Date()
             })
         }
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Card buyed successfully',
+            showConfirmButton: false,
+            timer: 1500
+        })
         getCards();
         handleCloseBuy();
     }

@@ -18,7 +18,6 @@ export const editCard = async (card) => {
     }
 }
 export const changeStatusCard = async (card) => {
-    console.log('Status')
     try {
         const { data } = await clienteAxios.put(`/card/change-status/${card.id}`, card);
         return data;
