@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useContext, useState, useEffect } from 'react'
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap'
 import CardContext from '../../context/card/cardContext';
@@ -25,7 +26,7 @@ export const ModalCard = ({ show, handleClose, selectedCard, disable = false }) 
     const { getCards } = cardContext;
 
     const userContext = useContext(UserContext);
-    const { user, getUsers, users } = userContext;
+    const { user } = userContext;
 
     const categoryContext = useContext(CategoryContext);
     const { getCategories, categories } = categoryContext;

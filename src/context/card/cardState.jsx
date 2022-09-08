@@ -36,7 +36,7 @@ const CardState = ({ children }) => {
         }
     }
 
-    const getCardsByStatus = async (status) => {
+    const getCardsByStatusAndCategory = async (status) => {
         try {
             const respuesta = await clienteAxios.post(`card/filter-category-status`, status);
             dispatch({
@@ -53,7 +53,7 @@ const CardState = ({ children }) => {
                 cards: state.cards,
                 getCards,
                 getCardsByCategory,
-                getCardsByStatus
+                getCardsByStatusAndCategory
             }}
         >
             {children}

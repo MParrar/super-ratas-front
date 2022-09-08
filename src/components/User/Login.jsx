@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useContext, useEffect, useState } from 'react'
 import UserContext from '../../context/user/userContext';
 import { useNavigate } from 'react-router-dom'
@@ -18,13 +19,14 @@ export const Login = () => {
     const { email, password } = userFound;
 
     const userContext = useContext(UserContext);
-    const { login, user, authenticated, message } = userContext;
+    const { login, authenticated, message } = userContext;
 
     useEffect(() => {
         if (authenticated) {
             navigate('/')
         }
-    }, [authenticated]);
+    }, [authenticated]);   // eslint-disable-next-line react-hooks/exhaustive-deps
+
 
     const onSubmit = async (e) => {
         e.preventDefault()

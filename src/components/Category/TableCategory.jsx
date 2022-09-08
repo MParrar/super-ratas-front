@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Col, Form, Modal, Table } from 'react-bootstrap'
+import { Button, Form, Modal, Table } from 'react-bootstrap'
 import { editCategory, deleteCategory } from '../../services/category';
 import Swal from 'sweetalert2'
 import { AiFillEdit, AiFillSave, AiFillDelete } from 'react-icons/ai';
@@ -112,9 +112,6 @@ export const TableCategory = ({ showTableCategory, handleCloseTableCategory, cat
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleCloseTableCategory}>
                     Close
-                </Button>
-                <Button variant="success" onClick={handleCloseTableCategory}>
-                    Save Changes
                 </Button>
             </Modal.Footer>
         </Modal>

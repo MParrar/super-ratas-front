@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useContext, useEffect, useState } from 'react'
 import { Button, Dropdown } from 'react-bootstrap'
 import CardContext from '../../context/card/cardContext';
@@ -6,14 +7,20 @@ import UserContext from '../../context/user/userContext';
 import { getStatus } from '../../services/status';
 import { ModalCard } from '../Modal/ModalCard';
 import { ModalCategory } from '../Modal/ModalCategory';
-import { AiFillCreditCard, AiFillPlusCircle } from 'react-icons/ai';
+import { AiFillCreditCard, AiFillPlusCircle, AiOutlineUserAdd } from 'react-icons/ai';
 import './browser.css'
 import { TableCategory } from '../Category/TableCategory';
+import { ModalUser } from '../Modal/MoldaUser';
+import { TableUser } from '../User/TableUser';
+import { ModalInfo } from '../Modal/ModalInfo';
 export const Browser = () => {
 
     const [show, setShow] = useState(false);
     const [showModalCategory, setShowModalCategory] = useState(false);
     const [showTableCategory, setShowTableCategory] = useState(false);
+    const [showModalUser, setShowModalUser] = useState(false);
+    const [showTableUser, setShowTableUser] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
     const [execute, setExecute] = useState(false);
     const [filter, setFilter] = useState({
         status_id: null,
@@ -22,13 +29,13 @@ export const Browser = () => {
     const [status, setStatus] = useState([]);
 
     const cardContext = useContext(CardContext);
-    const { getCards, getCardsByCategory, getCardsByStatus } = cardContext;
+    const { getCards, getCardsByStatusAndCategory } = cardContext;
 
     const categoryContext = useContext(CategoryContext);
     const { getCategories, categories } = categoryContext;
 
     const userContext = useContext(UserContext);
-    const { user } = userContext;
+    const { user, getUsers, users } = userContext;
 
     const handleChange = (type, value) => {
         setFilter({
@@ -40,7 +47,7 @@ export const Browser = () => {
     };
 
     useEffect(() => {
-        getCardsByStatus(filter)
+        getCardsByStatusAndCategory(filter)
 
     }, [execute]);
 
@@ -57,6 +64,9 @@ export const Browser = () => {
         getStatusList()
     }, []);
 
+    useEffect(() => {
+        getUsers()
+    }, []);
     const handleClose = () => {
         setShow(!show);
     }
@@ -69,16 +79,20 @@ export const Browser = () => {
         setShowModalCategory(false);
     }
 
-    const filterByCategory = (category) => {
-        getCardsByCategory(category);
-    }
-
-    const filterByStatus = (status) => {
-        getCardsByStatus(status);
+    const handleCloseModalUser = () => {
+        setShowModalUser(false)
     }
 
     const handleCloseTableCategory = () => {
         setShowTableCategory(false)
+    }
+
+    const handleCloseTableUser = () => {
+        setShowTableUser(false)
+    }
+
+    const handleCloseInfo = () => {
+        setShowInfo(false)
     }
     return (
         <>
@@ -99,6 +113,16 @@ export const Browser = () => {
                     <Button className='m-2'
                         style={{ background: '#DDA628' }}
                         onClick={() => setShowTableCategory(true)}>Show Category Table</Button>
+                }
+                {user && user.role_id === 3 &&
+                    <Button className='m-2'
+                        style={{ background: '#19b9a7' }}
+                        onClick={() => setShowModalUser(true)}><AiOutlineUserAdd size='20px' /></Button>
+                }
+                {user && user.role_id === 3 &&
+                    <Button className='m-2'
+                        style={{ background: '#19b9a7' }}
+                        onClick={() => setShowTableUser(true)}>Show User Table</Button>
                 }
                 <Dropdown className='m-1'>
                     <Dropdown.Toggle
@@ -141,7 +165,9 @@ export const Browser = () => {
                         }
                     </Dropdown.Menu>
                 </Dropdown>
-
+                <Button
+                    onClick={() => setShowInfo(true)}
+                    style={{ marginLeft: '4px' }}>Info</Button>
             </div>
             {
                 show && <ModalCard
@@ -164,6 +190,25 @@ export const Browser = () => {
                     getCategories={getCategories}
                 />
             }
+
+            {showModalUser && <ModalUser
+                showModalUser={showModalUser}
+                handleCloseModalUser={handleCloseModalUser}
+            />
+            }
+
+            {
+                showTableUser && <TableUser
+                    showTableUser={showTableUser}
+                    handleCloseTableUser={handleCloseTableUser}
+                    users={users}
+                    getUsers={getUsers}
+                />
+            }
+            {showInfo && <ModalInfo
+                showInfo={showInfo}
+                handleCloseInfo={handleCloseInfo}
+            />}
         </>
 
     )

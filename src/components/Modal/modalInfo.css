@@ -1,0 +1,26 @@
+
+.color__erased{
+    list-style: none;
+    background:red;
+    width: 15px;
+    margin-bottom: 4px;
+}
+
+.color__published{
+    list-style: none;
+    background:green;
+    width: 15px;
+    margin-bottom: 4px;
+}
+
+.color__sold_out{
+    list-style: none;
+    background:blue;
+    width: 15px;
+    margin-bottom: 4px;
+}
+
+.letter_info{
+    width: 100px;
+    margin-left: 20px;
+}
