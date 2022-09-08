@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 import clienteAxios from "../../config/axios";
-import { GET_CARDS, GET_CARDS_BY_CATEGORY } from "../../types";
+import { GET_CARDS, GET_CARDS_BY_CATEGORY, GET_CARDS_BY_STATUS } from "../../types";
 import CardContext from "./cardContext";
 import { CardReducer } from "./cardReducer";
 
@@ -36,13 +36,24 @@ const CardState = ({ children }) => {
         }
     }
 
-
+    const getCardsByStatusAndCategory = async (status) => {
+        try {
+            const respuesta = await clienteAxios.post(`card/filter-category-status`, status);
+            dispatch({
+                type: GET_CARDS_BY_STATUS,
+                payload: respuesta.data
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <CardContext.Provider
             value={{
                 cards: state.cards,
                 getCards,
-                getCardsByCategory
+                getCardsByCategory,
+                getCardsByStatusAndCategory
             }}
         >
             {children}

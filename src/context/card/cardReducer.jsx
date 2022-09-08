@@ -1,11 +1,11 @@
-import { GET_CARDS, GET_CARDS_BY_CATEGORY } from "../../types";
+import { GET_CARDS, GET_CARDS_BY_CATEGORY, GET_CARDS_BY_STATUS } from "../../types";
 
 
 export const CardReducer = (state, action) => {
-    console.log(action.type)
     switch (action.type) {
         case GET_CARDS_BY_CATEGORY:
         case GET_CARDS:
+        case GET_CARDS_BY_STATUS:
             return {
                 ...state,
                 cards: action.payload

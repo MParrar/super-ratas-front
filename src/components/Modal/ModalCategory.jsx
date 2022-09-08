@@ -1,7 +1,9 @@
+/*eslint-disable*/
 import React, { useContext, useEffect, useState } from 'react'
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap'
 import CategoryContext from '../../context/category/categoryContext'
 import { createCategory } from '../../services/category';
+import Swal from 'sweetalert2'
 
 export const ModalCategory = ({ showModalCategory, handleCloseModalCategoy }) => {
 
@@ -25,12 +27,31 @@ export const ModalCategory = ({ showModalCategory, handleCloseModalCategoy }) =>
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (name === '') {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'All fields are required',
+            })
+        }
         if (categories.filter((item) => item.name.toUpperCase() === category.name.toUpperCase())[0]) {
-            console.log("NEEL")
+            return Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'There is already a category with the same name',
+            })
         } else {
             const response = await createCategory(category);
-            console.log(response)
+            getCategories()
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Category created successfully',
+                showConfirmButton: false,
+                timer: 1500
+            })
         }
+        handleCloseModalCategoy()
     }
 
     return (
@@ -57,7 +78,7 @@ export const ModalCategory = ({ showModalCategory, handleCloseModalCategoy }) =>
                 <Button variant="secondary" onClick={handleCloseModalCategoy}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleSubmit}>
+                <Button variant="success" onClick={handleSubmit}>
                     Save Changes
                 </Button>
             </Modal.Footer>

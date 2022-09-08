@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 import clienteAxios from "../../config/axios";
-import { GET_USERS } from "../../types";
+import { GET_USERS, LOGIN_ERROR, LOGIN_USER, LOGOUT_USER } from "../../types";
 import UserContext from "./userContext";
 import { UserReducer } from "./userReducer";
 
@@ -8,6 +8,9 @@ import { UserReducer } from "./userReducer";
 const UserState = ({ children }) => {
     const initialState = {
         users: [],
+        user: null,
+        authenticated: null,
+        message: ''
     }
 
     const [state, dispatch] = useReducer(UserReducer, initialState);
@@ -24,14 +27,41 @@ const UserState = ({ children }) => {
         }
     }
 
+    const login = async (user) => {
+        try {
+            const response = await clienteAxios.post('/user/login', user);
+            dispatch({
+                type: LOGIN_USER,
+                payload: response.data,
+            });
 
+
+        } catch (error) {
+            dispatch({
+                type: LOGIN_ERROR,
+                payload: error.response.data.message,
+            });
+            console.log(error.response)
+        }
+    };
+
+    const logout = () => {
+        dispatch({
+            type: LOGOUT_USER
+        })
+    }
 
 
     return (
         <UserContext.Provider
             value={{
                 users: state.users,
+                user: state.user,
+                authenticated: state.authenticated,
+                message: state.message,
                 getUsers,
+                login,
+                logout
             }}
         >
             {children}
