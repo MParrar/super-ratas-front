@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Button, Fade, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import UserContext from '../../context/user/userContext';
 import { ModalBuy } from '../Modal/ModalBuy';
 import { ModalCard } from '../Modal/ModalCard';

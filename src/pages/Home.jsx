@@ -5,7 +5,6 @@ import { ListCard } from '../components/Card/ListCard'
 import { Navbar } from '../components/Navbar/Navbar'
 import CardState from '../context/card/cardState'
 import CategoryState from '../context/category/categoryState'
-import UserState from '../context/user/userState'
 
 export const Home = () => {
     return (
