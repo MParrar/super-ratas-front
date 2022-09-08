@@ -5,6 +5,7 @@ import UserContext from '../../context/user/userContext'
 import CategoryContext from '../../context/category/categoryContext'
 import { createCard, editCard } from '../../services/card';
 import { getBuyers } from '../../services/buyer';
+import Swal from 'sweetalert2'
 
 let initialCard = {
     category_id: '',
@@ -33,15 +34,16 @@ export const ModalCard = ({ show, handleClose, selectedCard, disable = false }) 
         if (card?.status_id === 2) {
             getAllBuyer({
                 card_id: card.id,
-                user_id: user.id
             });
 
         }
-        getCategories();
-        setCard({
-            ...card,
-            user_id: user.id
-        });
+        if (user) {
+            getCategories();
+            setCard({
+                ...card,
+                user_id: user.id
+            });
+        }
     }, []);
 
     const getAllBuyer = async (buyer) => {
@@ -59,15 +61,36 @@ export const ModalCard = ({ show, handleClose, selectedCard, disable = false }) 
     const handleSubmit = (e) => {
         e.preventDefault()
 
+        if (price === '' || points === '' || category_id === '') {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'price points and category are required',
+            })
+        }
         if (selectedCard) {
             editCard(card)
             getCards()
-
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Card edited successfully',
+                showConfirmButton: false,
+                timer: 1500
+            })
         } else {
             createCard(card)
+            getCards()
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Card created successfully',
+                showConfirmButton: false,
+                timer: 1500
+            })
 
         }
-        getCards()
+
         handleClose()
     }
 
@@ -76,7 +99,7 @@ export const ModalCard = ({ show, handleClose, selectedCard, disable = false }) 
         card &&
         (<Modal show={show} onHide={handleClose} size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title>{disable ? 'See more information' : selectedCard ? 'Edit card' : 'Add new card'}</Modal.Title>
+                <Modal.Title>{disable ? 'Details' : selectedCard ? 'Edit card' : 'Add new card'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
@@ -145,6 +168,7 @@ export const ModalCard = ({ show, handleClose, selectedCard, disable = false }) 
                             <Form.Group as={Col} controlId="formGridEmail">
                                 <Form.Label>Buyer</Form.Label>
                                 <Form.Control
+                                    disabled={disable}
                                     type="text"
                                     value={buyer[0]?.user_name}
                                     readOnly

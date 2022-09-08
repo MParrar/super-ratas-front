@@ -19,7 +19,7 @@ export const Navbar = () => {
     return (
         <div className='header'>
 
-            <h6 className='title'>Hola ratita {`${user && user?.name}!!!`}</h6>
+            <h6 className='title' style={{marginTop:'10px'}}>Hi ratita {`${(user) ? user?.name : ''}!!!`}</h6>
             <h1 className='title'>Super Ratas</h1>
             <button
                 onClick={() => login()}

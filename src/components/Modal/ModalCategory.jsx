@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap'
 import CategoryContext from '../../context/category/categoryContext'
 import { createCategory } from '../../services/category';
+import Swal from 'sweetalert2'
 
 export const ModalCategory = ({ showModalCategory, handleCloseModalCategoy }) => {
 
@@ -28,8 +29,15 @@ export const ModalCategory = ({ showModalCategory, handleCloseModalCategoy }) =>
         if (categories.filter((item) => item.name.toUpperCase() === category.name.toUpperCase())[0]) {
         } else {
             const response = await createCategory(category);
-            console.log(response)
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Category created successfully',
+                showConfirmButton: false,
+                timer: 1500
+            })
         }
+        handleCloseModalCategoy()
     }
 
     return (
@@ -56,7 +64,7 @@ export const ModalCategory = ({ showModalCategory, handleCloseModalCategoy }) =>
                 <Button variant="secondary" onClick={handleCloseModalCategoy}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleSubmit}>
+                <Button variant="success" onClick={handleSubmit}>
                     Save Changes
                 </Button>
             </Modal.Footer>

@@ -3,6 +3,7 @@ import UserContext from '../../context/user/userContext';
 import { useNavigate } from 'react-router-dom'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import './login.css'
+import { NotificationError } from '../Alert/Alert';
 
 export const Login = () => {
 
@@ -12,11 +13,12 @@ export const Login = () => {
         email: '',
         password: ''
     });
+    const [error, setError] = useState('');
 
     const { email, password } = userFound;
 
     const userContext = useContext(UserContext);
-    const { login, user, authenticated } = userContext;
+    const { login, user, authenticated, message } = userContext;
 
     useEffect(() => {
         if (authenticated) {
@@ -26,6 +28,11 @@ export const Login = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
+        setError('')
+        if (password === '' || email === '') {
+            setError('All fields are required')
+            return
+        }
         await login(userFound);
     }
 
@@ -47,12 +54,16 @@ export const Login = () => {
 
             <div className="box__login">
                 <div className='contents'>
+                    {(message || error) && <NotificationError
+                        alert={message ? message : error}
+                    />}
+
                     <h1>Log In</h1>
                     <hr />
                     <h2>Super Ratas</h2>
                     <Form
                         className='mt-4'
-                    // onSubmit={onSubmit}
+
                     >
                         <Row className="mb-3">
                             <Form.Group as={Col} md={12} controlId="formGridEmail">
@@ -62,6 +73,7 @@ export const Login = () => {
                                     name='email'
                                     value={email}
                                     type="email"
+                                    required
                                     placeholder="Your Email" />
                             </Form.Group>
 
@@ -72,6 +84,7 @@ export const Login = () => {
                                     value={password}
                                     name='password'
                                     type="password"
+                                    required
                                     placeholder="Your password" />
                             </Form.Group>
                         </Row>
